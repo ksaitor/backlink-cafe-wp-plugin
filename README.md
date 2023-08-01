@@ -1,7 +1,7 @@
 # Backlink Cafe Wordpress Monetization Plugin
 Backlink.Cafe WordPress Plugin allows WordPress site owners to accept paid backlinks and guest posts without tedious back and forth with link builders. Just accept or reject offers.
 
-[backlink cafe wordpress monetization plugin](https://wp.backlink.cafe/wp-content/uploads/2023/07/WP-Admin-View.png)
+![backlink cafe wordpress monetization plugin](https://wp.backlink.cafe/wp-content/uploads/2023/07/WP-Admin-View.png)
 
 ### Backlink Cafe Features
 - Escrow. Making sure you are paid for guest posts and links you host on your site.
