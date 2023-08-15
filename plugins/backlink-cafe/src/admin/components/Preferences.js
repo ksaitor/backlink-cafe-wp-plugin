@@ -17,6 +17,11 @@ function validateForm( data ) {
 		errors.pricePerLink = 'Price should be at least $10';
 	}
 
+	if ( data.pricePerGuestPost < 10 ) {
+		isValid = false;
+		errors.pricePerGuestPost = 'Price should be at least $10';
+	}
+
 	data.autoApproveLinks = !! data.autoApproveLinks;
 
 	if ( ! data.domain ) {
@@ -87,6 +92,7 @@ export default function Preferences( {
 			const result = await upsertWebsite( {
 				data: {
 					price: Number( formState.pricePerLink ) * 100,
+					postPrice: Number( formState.pricePerGuestPost ) * 100,
 					domain: formState.domain,
 					bitcoinAddress: formState.bitcoinAddress,
 					email: formState.email,
@@ -125,10 +131,10 @@ export default function Preferences( {
 
 			<form
 				onSubmit={ handleSubmit }
-				className="grid grid-cols-2 gap-4 mb-10 w-[min(500px,100%)]"
+				className="grid grid-cols-3 gap-4 mb-10 w-[min(700px,100%)]"
 			>
 				<Input
-					label="Your price per link (USD $)"
+					label="Link insertion price"
 					placeholder="20"
 					prefix="$"
 					type="number"
@@ -136,7 +142,17 @@ export default function Preferences( {
 					onChange={ ( e ) => onChange( 'pricePerLink', e ) }
 				/>
 				<Input
-					label="Links per post (limit)"
+					label="Guest post price"
+					// placeholder="40"
+					disabled
+					placeholder="Coming soon…"
+					prefix="$"
+					type="number"
+					value={ formState.pricePerGuestPost }
+					onChange={ ( e ) => onChange( 'pricePerGuestPost', e ) }
+				/>
+				<Input
+					label="Guest post link limit"
 					disabled
 					type="number"
 					// placeholder="20"
@@ -144,6 +160,7 @@ export default function Preferences( {
 					value={ formState.linksPerPostLimit }
 					onChange={ ( e ) => onChange( 'linksPerPostLimit', e ) }
 				/>
+
 				{ /*
 				<Input
 					label="Excluded keywords"
@@ -169,19 +186,22 @@ export default function Preferences( {
 				</div> */ }
 
 				<Input
-					label="Domain"
-					placeholder="mywebsite.com"
-					value={ formState.domain }
-					disabled
-					onChange={ ( e ) => onChange( 'domain', e ) }
-				/>
-				<Input
 					label="Email"
 					type="email"
 					placeholder="me@mywebsite.com"
 					value={ formState.email }
 					onChange={ ( e ) => onChange( 'email', e ) }
 				/>
+				<Input
+					label="Domain"
+					placeholder="⚠ Domain not detected"
+					type="url"
+					value={ formState.domain }
+					title="You can't change your domain"
+					disabled
+					onChange={ ( e ) => onChange( 'domain', e ) }
+				/>
+				<br />
 				<Input
 					label="Paypal Email"
 					type="email"
@@ -202,14 +222,14 @@ export default function Preferences( {
 					{ websiteInfo?.stripeConnectId ? (
 						<button
 							type="button"
-							className="px-6 py-2 text-lg font-bold text-black duration-200 border border-gray-500 rounded hover:text-black hover:bg-red-500 hover:opacity-100 opacity-60"
+							className="px-6 py-1 text-lg font-bold text-black duration-200 border border-gray-500 rounded hover:text-black hover:bg-red-500 hover:opacity-100 opacity-60"
 							onClick={ onStripeDisconnect }
 						>
 							Disconnect Stripe
 						</button>
 					) : (
 						<a
-							className="px-6 py-2 text-lg font-bold text-center duration-200 border border-black rounded hover:text-black hover:bg-white hover:opacity-70"
+							className="px-6 py-1 text-lg font-bold text-center duration-200 border border-[#8c8f94] rounded hvoer:border-black hover:text-black hover:bg-white hover:opacity-70"
 							href={ `https://connect.stripe.com/oauth/authorize?${ new URLSearchParams(
 								{
 									response_type: 'code',
@@ -224,7 +244,7 @@ export default function Preferences( {
 								}
 							) }` }
 						>
-							Connect Stripe
+							Connect to Stripe
 						</a>
 					) }
 				</div>
