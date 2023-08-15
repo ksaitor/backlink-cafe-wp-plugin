@@ -128,8 +128,9 @@ export default function Preferences( {
 				className="grid grid-cols-2 gap-4 mb-10 w-[min(500px,100%)]"
 			>
 				<Input
-					label="Your price per link"
-					placeholder="$20"
+					label="Your price per link (USD $)"
+					placeholder="20"
+					prefix="$"
 					type="number"
 					value={ formState.pricePerLink }
 					onChange={ ( e ) => onChange( 'pricePerLink', e ) }

@@ -50,7 +50,7 @@ export function Settings() {
 			/>
 			<section className="w-full min-h-full p-2 md:p-10">
 				<Logo />
-				<div className="flex justify-between gap-40 md:justify-normal">
+				<div className="flex justify-between">
 					<button
 						className={ `mb-4 text-3xl no-underline [font-family:Dela_Gothic_One] ${
 							tab === 'offers'
@@ -103,7 +103,7 @@ export function Settings() {
 									</p>
 								) }
 							</ul>
-						)}
+						) }
 
 						{ websiteInfo?.approved === false && (
 							<p className="text-lg">
