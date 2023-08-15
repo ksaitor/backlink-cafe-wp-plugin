@@ -145,7 +145,7 @@ class Backlink_Cafe_Admin_Api_Service
         $published = $post->post_status === 'publish';
         $author = get_the_author_meta('display_name', $post->post_author);
         $published_at = $post->post_date;
-        $link = $post->guid;
+        $link = get_permalink($post);
         $id = $post->ID;
 
         $domain = parse_url(get_site_url())['host'];
