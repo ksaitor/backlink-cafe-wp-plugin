@@ -25,20 +25,8 @@ class Backlink_Cafe_Admin_Posts_Service
     public static function wrap_with_anchor_tag($content, $start, $end, $url)
     {
         $before = substr($content, 0, $start);
-        $selected = substr($content, $start - 1, $end - $start);
-        $after = substr($content, $end - 1);
-
-        // Check if the selected portion already contains an anchor tag
-        preg_match('/.*?(<a(.*)?>)$/', $before, $before_anchor_match);
-        preg_match('/^(<\/a>).*?/', $after, $after_anchor_match);
-
-        if ($before_anchor_match[1] && $after_anchor_match[1]) {
-            return $content;
-        }
-
-        if (strpos($selected, '<a') !== false) {
-            return $content; // Return the original content if an anchor tag is already present
-        }
+        $selected = substr($content, $start, $end - $start + 1);
+        $after = substr($content, $end + 1);
 
         $wrappedContent = $before . '<a href="' . $url . '" rel="noopener">' . $selected . '</a>' . $after;
 
@@ -66,10 +54,9 @@ class Backlink_Cafe_Admin_Posts_Service
 
         foreach ($matches as $key => $match) {
             if ($index === -1 || $key === $index) {
-                $final_content = Backlink_Cafe_Admin_Posts_Service::wrap_with_anchor_tag($final_content, $match['startingIndex'] - 1, $match['endingIndex'], 'https://google.com');
+                $final_content = Backlink_Cafe_Admin_Posts_Service::wrap_with_anchor_tag($final_content, $match['startingIndex'], $match['endingIndex'], $url);
             }
         }
-
 
         $post->post_content = $final_content;
         wp_update_post($post);

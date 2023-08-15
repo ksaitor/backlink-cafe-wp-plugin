@@ -22,27 +22,30 @@
  */
 class Backlink_Cafe_Admin_Keywords
 {
-    public static function fuzzy_keyword_search($inputString, $searchString)
+    public static function isContainedInTag($content, $index, $keywordLength)
     {
-        $positions = array();
-        $pattern = '/<!--[^>]*-->|\b\w+\b/i';
+        $startIndex = max(0, $index - 1);
+        return $content[$startIndex] === '>' && $content[$startIndex + $keywordLength + 1] === '<';
+    }
 
-        preg_match_all($pattern, $inputString, $matches, PREG_OFFSET_CAPTURE);
+    public static function fuzzy_keyword_search($content, $keyword)
+    {
+        $indices = [];
+        $startingIndex = 0;
+        $keywordLength = strlen($keyword);
 
-        foreach ($matches[0] as $match) {
-            $word = $match[0];
-            $startingIndex = $match[1];
-            $endingIndex = $startingIndex + strlen($word) - 1;
-
-            if (levenshtein(strtolower($searchString), strtolower($word)) <= 2) {
-                $positions[] = array(
-                    "startingIndex" => $startingIndex + 1,
-                    "endingIndex" => $endingIndex + 2
+        while (($startingIndex = strpos($content, $keyword, $startingIndex)) !== false) {
+            if (!self::isContainedInTag($content, $startingIndex, $keywordLength)) {
+                $endingIndex = $startingIndex + strlen($keyword) - 1;
+                $indices[] = array(
+                    'startingIndex' => $startingIndex,
+                    'endingIndex' => $endingIndex
                 );
             }
+            $startingIndex = $startingIndex + strlen($keyword); // Move starting index to next position
         }
 
-        return $positions;
+        return $indices;
     }
 
 }

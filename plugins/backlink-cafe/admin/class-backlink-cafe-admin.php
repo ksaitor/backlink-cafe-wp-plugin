@@ -130,18 +130,6 @@ class Backlink_Cafe_Admin
 
 	public function enqueue_resources()
 	{
-		// require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/backlink-cafe-admin-api-service.php';
-		// require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/backlink-cafe-admin-posts-service.php';
-
-		// $offers = Backlink_Cafe_Admin_Api_Service::get_offers(parse_url(get_site_url())['host']);
-		// $domain = parse_url(get_site_url())['host'];
-		// if (parse_url(get_site_url())['port']) {
-		// 	$domain .= ':' . parse_url(get_site_url())['port'];
-		// }
-
-		// $website_info = Backlink_Cafe_Admin_Api_Service::update_website(array('domain' => $domain));
-		// Backlink_Cafe_Admin_Posts_Service::synchronize_blog_posts_to_server();
-
 		$stripe_client_id = getenv('WORDPRESS_ENVIRONMENT') == 'development' ? 'ca_O9toC8wmOWUJrBMev3flRtrSnzv019O8' : 'ca_O9tojY86bO0l5O6hPOMulEOEiGbcr0re';
 
 		$localize = array(
