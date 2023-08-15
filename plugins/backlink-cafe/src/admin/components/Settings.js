@@ -86,7 +86,7 @@ export function Settings() {
 
 				{ tab === 'offers' && (
 					<>
-						{ websiteInfo?.approved === true ? (
+						{ websiteInfo?.approved === true && (
 							<ul className="space-y-4">
 								{ /* <RecommendedOrder /> */ }
 								{ offers?.length > 0 ? (
@@ -103,7 +103,9 @@ export function Settings() {
 									</p>
 								) }
 							</ul>
-						) : (
+						)}
+
+						{ websiteInfo?.approved === false && (
 							<p className="text-lg">
 								Thank you for your application. Your website is
 								pending approval.
