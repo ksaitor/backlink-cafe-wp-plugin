@@ -19,46 +19,63 @@
  *
  */
 
+import cn from 'classnames';
+import { useState } from 'react';
 import { approveOffer, rejectOffer } from '../../wp-api';
 
 /**
  * @param {OfferProps} offer
  */
 export function Offer( offer ) {
-	const {
-		status,
-		buyerApproved,
-		id,
-		order,
-		sellerApproved,
-		website,
-		callback,
-	} = offer;
+	const { buyerApproved, id, order, sellerApproved, website, callback } =
+		offer;
+
+	const [ loading, setLoading ] = useState( false );
+	const [ status, setStatus ] = useState( offer.status );
+	const [ error, setError ] = useState( null );
 
 	const accept = async () => {
-		await approveOffer( {
-			data: {
-				offerId: id,
-				websiteDomain: website.domain,
-			},
-		} );
+		if ( loading ) return;
+		setLoading( true );
 
-		await callback?.();
+		try {
+			await approveOffer( {
+				data: {
+					offerId: id,
+					websiteDomain: website.domain,
+				},
+			} );
+			setStatus( 'PLACED' );
+			await callback?.();
+		} catch ( e ) {
+			setError( e );
+		} finally {
+			setLoading( false );
+		}
 	};
 
 	const reject = async () => {
+		if ( loading ) return;
+		setLoading( true );
 		const rejectionReason = prompt( 'Why are you rejecting this offer?' );
-		if ( ! rejectionReason?.trim().length < 1 )
+		if ( rejectionReason === null || rejectionReason?.trim().length < 2 )
 			return alert( 'Please provide a reason for rejecting this offer.' );
-		await rejectOffer( {
-			data: {
-				offerId: id,
-				websiteDomain: website.domain,
-				rejectionReason,
-			},
-		} );
 
-		await callback?.();
+		try {
+			await rejectOffer( {
+				data: {
+					offerId: id,
+					websiteDomain: website.domain,
+					rejectionReason,
+				},
+			} );
+			setStatus( 'REJECTED' );
+			await callback?.();
+		} catch ( e ) {
+			setError( e );
+		} finally {
+			setLoading( false );
+		}
 	};
 
 	return (
@@ -98,15 +115,29 @@ export function Offer( offer ) {
 			{ status === 'PENDING' && (
 				<div className="flex gap-2 text-lg">
 					<button
-						className="p-1 px-4 text-white bg-black rounded hover:opacity-80"
+						className={ cn(
+							'p-1 px-4 text-white bg-black rounded hover:opacity-80',
+							{
+								'cursor-wait opacity-40 hover:opacity-40':
+									loading,
+							}
+						) }
 						onClick={ accept }
+						disabled={ loading }
 					>
 						Accept for ${ offer.price / 100 }
 					</button>
 					<button
-						className="p-1 px-4 rounded opacity-80 hover:bg-gray-300 hover:opacity-100"
+						className={ cn(
+							'p-1 px-4 rounded opacity-80 hover:bg-gray-300 hover:opacity-100',
+							{
+								'cursor-wait opacity-40 hover:opacity-40':
+									loading,
+							}
+						) }
 						title="Skip this offer"
 						onClick={ reject }
+						disabled={ loading }
 					>
 						Reject
 					</button>
@@ -115,11 +146,11 @@ export function Offer( offer ) {
 			{ status === 'PLACED' && (
 				<div className="flex items-center gap-2">
 					<div
-						className="px-6 py-2 text-lg font-bold text-green-600 duration-200 bg-transparent border-2 border-green-600 rounded"
+						className="p-1 px-4 text-lg font-bold text-green-600 duration-200 bg-transparent border-2 border-green-600 rounded"
 						disabled
 						title="Link is now placed. Waiting for it to get indexed by Google."
 					>
-						Placed. Indexing...
+						Link placed. Indexing...
 					</div>
 
 					<p className="text-md text-black/40">
@@ -129,7 +160,7 @@ export function Offer( offer ) {
 			) }
 			{ status === 'PAID' && (
 				<div className="flex items-center gap-2">
-					<div className="px-6 py-2 text-lg font-bold text-green-600 duration-200 bg-transparent border-2 border-green-600 rounded">
+					<div className="p-1 px-4 text-lg font-bold text-green-600 duration-200 bg-transparent border-2 border-green-600 rounded">
 						Paid
 					</div>
 				</div>
@@ -139,6 +170,12 @@ export function Offer( offer ) {
 					<span className="p-1 px-4 border border-gray-500 border-solid rounded opacity-80">
 						You rejected this offer
 					</span>
+				</div>
+			) }
+			{ error && (
+				<div className="p-1 font-red-500">
+					{ error.message ??
+						'Something went wrong. Please refresh the page.' }
 				</div>
 			) }
 			<div className="absolute hidden bottom-1 right-2 opacity-60 group-hover:block">
