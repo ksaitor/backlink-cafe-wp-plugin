@@ -58,8 +58,10 @@ export function Offer( offer ) {
 		if ( loading ) return;
 		setLoading( true );
 		const rejectionReason = prompt( 'Why are you rejecting this offer?' );
-		if ( rejectionReason === null || rejectionReason?.trim().length < 2 )
+		if ( rejectionReason === null || rejectionReason?.trim().length < 2 ) {
+			setLoading( false );
 			return alert( 'Please provide a reason for rejecting this offer.' );
+		}
 
 		try {
 			await rejectOffer( {
