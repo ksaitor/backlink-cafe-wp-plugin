@@ -16,7 +16,7 @@
  * Plugin Name:       Backlink Cafe
  * Plugin URI:        https://backlink.cafe
  * Description:       Earn more with your website. Set your price and accept guest posts and mentions relevant to your niche.
- * Version:           1.1.1
+ * Version:           1.1.2
  * Author:            Backlink Cafe
  * Author URI:        https://backlink.cafe/authors
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('BACKLINK_CAFE_VERSION', '1.1.1');
+define('BACKLINK_CAFE_VERSION', '1.1.2');
 
 /**
  * The code that runs during plugin activation.

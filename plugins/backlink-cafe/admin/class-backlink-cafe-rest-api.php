@@ -187,10 +187,8 @@ class Backlink_Cafe_Rest_Api
 			$body = $request->get_json_params();
 		}
 
-
 		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/backlink-cafe-admin-api-service.php';
 		$result = Backlink_Cafe_Admin_Api_Service::approve_offer($body);
-		return $body;
 		if (!array_key_exists('error', $result)) {
 			require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/backlink-cafe-admin-posts-service.php';
 			Backlink_Cafe_Admin_Posts_Service::update_keyword_link_in_post(
@@ -199,6 +197,8 @@ class Backlink_Cafe_Rest_Api
 				$result['order']['url'],
 				0,
 			);
+			wp_redirect(home_url() . '/wp-admin/admin.php?page=backlink-cafe');
+			exit();
 		} else if ($request->get_method() === 'GET') {
 			return array(
 				'code' => 'rest_no_route',
