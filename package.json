@@ -1,38 +1,38 @@
 {
-  "name": "backlink-cafe",
-  "version": "1.1.2",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "lint:fix": "wp-scripts format",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "docker:start": "docker-compose up --detach",
-    "docker:stop": "docker-compose down",
-    "build": "yarn build:js && yarn build:css && yarn plugin-zip && yarn plugin-copy",
-    "build:js": "wp-scripts build ./plugins/backlink-cafe/src/admin/index.js --output-path=./plugins/backlink-cafe/admin/js/",
-    "build:css": "tailwindcss -i ./plugins/backlink-cafe/src/css/index.css -o ./plugins/backlink-cafe/admin/css/backlink-cafe-admin.css --minify",
-    "plugin-zip": "cd ./plugins/backlink-cafe && ../../node_modules/.bin/wp-scripts plugin-zip",
-    "plugin-copy": "cp ./plugins/backlink-cafe/backlink-cafe.zip ../app/public/backlink-cafe.zip",
-    "dev:admin": "wp-scripts start ./plugins/backlink-cafe/src/admin/index.js --output-path=./plugins/backlink-cafe/admin/js/",
-    "dev:tailwind": "tailwindcss -i ./plugins/backlink-cafe/src/css/index.css -o ./plugins/backlink-cafe/admin/css/backlink-cafe-admin.css --watch",
-    "dev": "concurrently \"yarn dev:admin\" \"yarn dev:tailwind\""
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@wordpress/api-fetch": "^6.32.0",
-    "@wordpress/components": "^25.1.0",
-    "@wordpress/url": "^3.36.0",
-    "autoprefixer": "^10.4.7",
-    "classnames": "^2.3.2",
-    "lodash": "^4.17.21",
-    "react-icon": "^1.0.0",
-    "react-icons": "^4.10.1",
-    "react-router-dom": "^6.3.0"
-  },
-  "devDependencies": {
-    "@wordpress/scripts": "^26.6.0",
-    "concurrently": "^8.2.0",
-    "tailwindcss": "^3.3.2"
-  }
+	"name": "backlink-cafe",
+	"version": "1.1.2",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"lint:fix": "wp-scripts format",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"docker:start": "docker-compose up --detach",
+		"docker:stop": "docker-compose down",
+		"build": "yarn build:js && yarn build:css && yarn plugin-zip && yarn plugin-copy",
+		"build:js": "wp-scripts build ./plugins/backlink-cafe/src/admin/index.js --output-path=./plugins/backlink-cafe/admin/js/",
+		"build:css": "tailwindcss -i ./plugins/backlink-cafe/src/css/index.css -o ./plugins/backlink-cafe/admin/css/backlink-cafe-admin.css --minify",
+		"plugin-zip": "cd ./plugins/backlink-cafe && ../../node_modules/.bin/wp-scripts plugin-zip",
+		"plugin-copy": "cp ./plugins/backlink-cafe/backlink-cafe.zip ../app/public/backlink-cafe.zip",
+		"dev:admin": "wp-scripts start ./plugins/backlink-cafe/src/admin/index.js --output-path=./plugins/backlink-cafe/admin/js/",
+		"dev:tailwind": "tailwindcss -i ./plugins/backlink-cafe/src/css/index.css -o ./plugins/backlink-cafe/admin/css/backlink-cafe-admin.css --watch",
+		"dev": "concurrently \"yarn dev:admin\" \"yarn dev:tailwind\""
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@wordpress/api-fetch": "^6.32.0",
+		"@wordpress/components": "^25.1.0",
+		"@wordpress/url": "^3.36.0",
+		"autoprefixer": "^10.4.7",
+		"classnames": "^2.3.2",
+		"lodash": "^4.17.21",
+		"react-icon": "^1.0.0",
+		"react-icons": "^4.10.1",
+		"react-router-dom": "^6.3.0"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^26.6.0",
+		"concurrently": "^8.2.0",
+		"tailwindcss": "^3.3.2"
+	}
 }
