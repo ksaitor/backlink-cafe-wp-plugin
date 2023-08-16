@@ -28,13 +28,24 @@ class Backlink_Cafe_Admin_Keywords
         return $content[$startIndex] === '>' && $content[$startIndex + $keywordLength + 1] === '<';
     }
 
+    public static function firstExactWordIndex($keyword, $text, $offset = 0)
+    {
+        $pattern = '/\b' . preg_quote($keyword) . '\b/';
+
+        if (preg_match($pattern, $text, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+            return $matches[0][1];
+        } else {
+            return false;
+        }
+    }
+
     public static function fuzzy_keyword_search($content, $keyword)
     {
         $indices = [];
         $startingIndex = 0;
         $keywordLength = strlen($keyword);
 
-        while (($startingIndex = strpos($content, $keyword, $startingIndex)) !== false) {
+        while (($startingIndex = self::firstExactWordIndex($keyword, $content, $startingIndex)) !== false) {
             if (!self::isContainedInTag($content, $startingIndex, $keywordLength)) {
                 $endingIndex = $startingIndex + strlen($keyword) - 1;
                 $indices[] = array(
