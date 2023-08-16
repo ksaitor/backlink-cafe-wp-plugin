@@ -191,14 +191,22 @@ class Backlink_Cafe_Rest_Api
 		$result = Backlink_Cafe_Admin_Api_Service::approve_offer($body);
 		if (!array_key_exists('error', $result)) {
 			require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/backlink-cafe-admin-posts-service.php';
-			Backlink_Cafe_Admin_Posts_Service::update_keyword_link_in_post(
+			$result = Backlink_Cafe_Admin_Posts_Service::update_keyword_link_in_post(
 				$result['blogPost']['cmsId'],
 				$result['anchor'],
 				$result['order']['url'],
 				0,
 			);
-			wp_redirect(home_url() . '/wp-admin/admin.php?page=backlink-cafe');
-			exit();
+			if ($request->get_method() === 'GET') {
+				wp_redirect(home_url() . '/wp-admin/admin.php?page=backlink-cafe');
+				exit();
+			}
+
+			if (!$result) {
+				return array(
+					'message' => 'There seems to be a problem adding links in your blog post.'
+				);
+			}
 		} else if ($request->get_method() === 'GET') {
 			return array(
 				'code' => 'rest_no_route',
