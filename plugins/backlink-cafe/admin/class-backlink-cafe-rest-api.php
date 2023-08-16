@@ -195,7 +195,7 @@ class Backlink_Cafe_Rest_Api
 			require_once plugin_dir_path(dirname(__FILE__)) . 'admin/partials/backlink-cafe-admin-posts-service.php';
 			Backlink_Cafe_Admin_Posts_Service::update_keyword_link_in_post(
 				$result['blogPost']['cmsId'],
-				$result['order']['anchor'],
+				$result['anchor'],
 				$result['order']['url'],
 				0,
 			);

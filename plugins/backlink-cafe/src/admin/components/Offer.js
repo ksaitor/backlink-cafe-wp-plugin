@@ -9,6 +9,7 @@
  *
  * @typedef {Object} OfferProps
  * @property {number} id
+ * @property {string?} anchor
  * @property {Website} website
  * @property {Order} order
  * @property {boolean} buyerApproved
@@ -75,7 +76,7 @@ export function Offer( offer ) {
 				</a>
 				<br />
 				<span className="opacity-80">with anchor text</span> "
-				<b title="Requested anchor text">{ order.anchor }</b>"<br />
+				<b title="Requested anchor text">{ offer.anchor }</b>"<br />
 				{ order.priceBTC && (
 					<>
 						<span className="opacity-80">price in BTC</span>{ ' ' }
@@ -94,7 +95,6 @@ export function Offer( offer ) {
 					{ offer.url }
 				</a>
 			</p>
-			{ /* <p className=""><code>&lt;a href="{ order.url }"&gt;{ order.anchor }&lt;/a&gt; </code></p> */ }
 			{ status === 'PENDING' && (
 				<div className="flex gap-2 text-lg">
 					<button
