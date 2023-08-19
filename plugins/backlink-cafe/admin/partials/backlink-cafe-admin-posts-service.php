@@ -70,7 +70,10 @@ class Backlink_Cafe_Admin_Posts_Service
         $args = array(
             'post_type' => 'post',
             'post_status' => 'publish',
-            'posts_per_page' => -1,
+            'posts_per_page' => 100,
+            'orderby' => array(
+                'date' => 'DESC'
+            ),
             'ignore_sticky_posts' => true,
         );
 
