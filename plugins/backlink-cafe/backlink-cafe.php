@@ -37,6 +37,102 @@ if (!defined('WPINC')) {
  */
 define('BACKLINK_CAFE_VERSION', '1.1.3');
 
+add_filter('plugins_api', 'request_backlink_cafe_info', 20, 3);
+add_filter('site_transient_update_plugins', 'backlink_cafe_update');
+
+function request_backlink_cafe_info()
+{
+	$remote = wp_remote_get(
+		'http://host.docker.internal:3000/info.json',
+		array(
+			'timeout' => 10,
+			'headers' => array(
+				'Accept' => 'application/json'
+			)
+		)
+	);
+
+	if (is_wp_error($remote) || wp_remote_retrieve_response_code($remote) !== 200 || empty(wp_remote_retrieve_body($remote))) {
+		return false;
+	}
+
+	$remote = json_decode(wp_remote_retrieve_body($remote));
+	return $remote;
+}
+
+function backlink_cafe_info($res, $action, $args)
+{
+	if ('plugin_information' !== $action) {
+		return $res;
+	}
+
+	if (plugin_basename(__DIR__) !== $args->slug) {
+		return $res;
+	}
+
+	$remote = request_backlink_cafe_info();
+
+	if (!$remote) {
+		return $res;
+	}
+
+	$res = new stdClass();
+
+	$res->name = $remote->name;
+	$res->slug = $remote->slug;
+	$res->version = $remote->version;
+	$res->tested = $remote->tested;
+	$res->requires = $remote->requires;
+	$res->author = $remote->author;
+	$res->author_profile = $remote->author_profile;
+	$res->download_link = $remote->download_url;
+	$res->trunk = $remote->download_url;
+	$res->requires_php = $remote->requires_php;
+	$res->last_updated = $remote->last_updated;
+
+	$res->sections = array(
+		'description' => $remote->sections->description,
+		'installation' => $remote->sections->installation,
+		'changelog' => $remote->sections->changelog
+	);
+
+	if (!empty($remote->banners)) {
+		$res->banners = array(
+			'low' => $remote->banners->low,
+			'high' => $remote->banners->high
+		);
+	}
+
+	return $res;
+}
+
+function backlink_cafe_update($transient)
+{
+	if (empty($transient->checked)) {
+		return $transient;
+	}
+
+	$remote = request_backlink_cafe_info();
+
+	if (
+		$remote
+		&& version_compare(BACKLINK_CAFE_VERSION, $remote->version, '<')
+		&& version_compare($remote->requires, get_bloginfo('version'), '<=')
+		&& version_compare($remote->requires_php, PHP_VERSION, '<')
+	) {
+		$res = new stdClass();
+		$res->slug = plugin_basename(__DIR__);
+		$res->plugin = plugin_basename(__FILE__);
+		$res->new_version = $remote->version;
+		$res->tested = $remote->tested;
+		$res->package = $remote->download_url;
+
+		$transient->response[$res->plugin] = $res;
+	}
+
+	return $transient;
+}
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-backlink-cafe-activator.php
