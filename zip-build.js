@@ -4,7 +4,7 @@ async function zip() {
     await zipdir('./plugins', {
         saveTo: './plugins/backlink-cafe/backlink-cafe.zip',
         filter: (path, stat) => {
-            if (path.match(/plugins\/index.php/) || path.match(/plugins\/backlink-cafe/)) {
+            if (path.match(/plugins\/backlink-cafe/)) {
                 if (path.match(/plugins\/backlink-cafe$/)) return true
                 if (path.match(/\.php$/)) return true
                 if (path.includes('LICENSE.txt')) return true
