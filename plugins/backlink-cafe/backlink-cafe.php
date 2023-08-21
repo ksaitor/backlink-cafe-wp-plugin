@@ -43,7 +43,7 @@ add_filter('site_transient_update_plugins', 'backlink_cafe_update');
 function request_backlink_cafe_info()
 {
 	$remote = wp_remote_get(
-		'http://host.docker.internal:3000/info.json',
+		'https://backlink.cafe/info.json',
 		array(
 			'timeout' => 10,
 			'headers' => array(
