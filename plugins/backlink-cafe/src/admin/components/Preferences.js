@@ -24,11 +24,6 @@ function validateForm( data ) {
 
 	data.autoApproveLinks = !! data.autoApproveLinks;
 
-	if ( ! data.domain ) {
-		isValid = false;
-		errors.domain = 'Domain is required.';
-	}
-
 	if ( ! data.email || ! isEmail( data.email ) ) {
 		isValid = false;
 		errors.email = 'Valid email is required.';
